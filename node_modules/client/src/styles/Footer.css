@@ -1,0 +1,11 @@
+/* Footer.css */
+
+.zentra-footer {
+  background-color: #e5e7eb; /* Tailwind gray-200 */
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #4b5563; /* Tailwind gray-600 */
+  border-top: 1px solid #d1d5db; /* subtle top border */
+}
+    

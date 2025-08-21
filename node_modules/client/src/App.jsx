@@ -1,29 +1,43 @@
-import { useState } from 'react';
-import { post } from './services/apiClient';
+import React, { useState, useEffect } from 'react';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import Features from './components/Features';
+import TravelPackages from './components/TravelPackages';
+import PopularTours from './components/PopularTours';
+import SriLankaMap from './components/SriLankaMap';
+import Testimonials from './components/Testimonials';
+import Footer from './components/Footer';
 
-export default function App() {
-  const [recs, setRecs] = useState([]);
-  const [status, setStatus] = useState('');
+function App() {
+  const [darkMode, setDarkMode] = useState(false);
 
-  async function getRecs() {
-    setStatus('Loading...');
-    try {
-      const data = await post('/recommendations', { interests: ['beach'], budgetLevel: 3, days: 5 });
-      setRecs(data.items || []);
-      setStatus('Done');
-    } catch (e) {
-      setStatus(e.message);
+  useEffect(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode) {
+      setDarkMode(JSON.parse(savedMode));
     }
-  }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('darkMode', JSON.stringify(newMode));
+  };
 
   return (
-    <div style={{ maxWidth: 720, margin: '2rem auto', fontFamily: 'system-ui' }}>
-      <h1>Intelligent Travel Planner</h1>
-      <button onClick={getRecs}>Get Recommendations</button>
-      <p>{status}</p>
-      <ul>
-        {recs.map((r, i) => <li key={i}>{r.name} — score {r.score}</li>)}
-      </ul>
+    <div className={`min-h-screen transition-colors duration-300 ${
+      darkMode ? 'dark bg-gray-900' : 'bg-white'
+    }`}>
+      <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <Hero darkMode={darkMode} />
+      <Features darkMode={darkMode} />
+      <TravelPackages darkMode={darkMode} />
+      <PopularTours darkMode={darkMode} />
+      <SriLankaMap darkMode={darkMode} />
+      <Testimonials darkMode={darkMode} />
+      <Footer darkMode={darkMode} />
     </div>
   );
 }
+
+export default App;

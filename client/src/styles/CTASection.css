@@ -1,0 +1,36 @@
+/* CTASection.css */
+
+.cta-section {
+  background-color: #f3f4f6; /* Tailwind's gray-100 */
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #1f2937; /* gray-800 */
+}
+
+.cta-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #111827; /* gray-900 */
+}
+
+.cta-section p {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  color: #4b5563; /* gray-600 */
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: #10b981; /* emerald-500 */
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #059669; /* emerald-600 */
+}

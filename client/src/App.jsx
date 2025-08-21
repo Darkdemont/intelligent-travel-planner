@@ -1,29 +1,22 @@
-import { useState } from 'react';
-import { post } from './services/apiClient';
+// client/src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import TestAI from './pages/TestAI'; // ← your old code
 
-export default function App() {
-  const [recs, setRecs] = useState([]);
-  const [status, setStatus] = useState('');
-
-  async function getRecs() {
-    setStatus('Loading...');
-    try {
-      const data = await post('/recommendations', { interests: ['beach'], budgetLevel: 3, days: 5 });
-      setRecs(data.items || []);
-      setStatus('Done');
-    } catch (e) {
-      setStatus(e.message);
-    }
-  }
-
+function App() {
   return (
-    <div style={{ maxWidth: 720, margin: '2rem auto', fontFamily: 'system-ui' }}>
-      <h1>Intelligent Travel Planner</h1>
-      <button onClick={getRecs}>Get Recommendations</button>
-      <p>{status}</p>
-      <ul>
-        {recs.map((r, i) => <li key={i}>{r.name} — score {r.score}</li>)}
-      </ul>
-    </div>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/dev/test-ai" element={<TestAI />} />
+        {/* Add more routes like /plan, /tours/:slug, etc. */}
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
+
+export default App;

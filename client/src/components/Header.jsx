@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Menu, X, Sun, Moon, MapPin, Sparkles } from 'lucide-react';
+import zentraLogo from '../assets/zentra-logo.png';
+
+
 
 const Header = ({ darkMode, toggleDarkMode }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,8 +30,8 @@ const Header = ({ darkMode, toggleDarkMode }) => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-white" />
+            <div className="w-20 h-20 rounded-lg overflow-hidden transform translate-x-4 transform duration-300 translate-y-0.5">
+              <img src={zentraLogo} alt="Zentra Logo" className="w-full h-full object-contain" />             
             </div>
             <div>
               <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>

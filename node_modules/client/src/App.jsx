@@ -7,6 +7,7 @@ import PopularTours from './components/PopularTours';
 import SriLankaMap from './components/SriLankaMap';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
+import ExperienceMap from './components/ExperienceMap';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -30,9 +31,12 @@ function App() {
     }`}>
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Hero darkMode={darkMode} />
-      <Features darkMode={darkMode} />
       <TravelPackages darkMode={darkMode} />
       <PopularTours darkMode={darkMode} />
+      <Features darkMode={darkMode} />
+      <ExperienceMap darkMode={darkMode} />
+      
+      
       <SriLankaMap darkMode={darkMode} />
       <Testimonials darkMode={darkMode} />
       <Footer darkMode={darkMode} />

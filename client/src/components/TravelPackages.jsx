@@ -1,4 +1,8 @@
 import React from 'react';
+import sigiriyaImg from '../assets/sigiriya.jpg';
+import ella from '../assets/ella.webp';
+import galle from '../assets/galle.webp';
+import nuwaraeliya from '../assets/nuwaraeliya.jpg';
 import PropTypes from 'prop-types';
 import {
   Calendar,
@@ -24,8 +28,7 @@ const TravelPackages = ({ darkMode }) => {
       originalPrice: '$1,199',
       rating: 4.9,
       reviews: 234,
-      image:
-        'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: sigiriyaImg,
       highlights: [
         'Sigiriya Rock Fortress',
         'Temple of the Tooth',
@@ -44,8 +47,7 @@ const TravelPackages = ({ darkMode }) => {
       originalPrice: '$1,699',
       rating: 4.8,
       reviews: 189,
-      image:
-        'https://images.pexels.com/photos/1450360/pexels-photo-1450360.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: ella,
       highlights: [
         'Ella Rock Hiking',
         'Yala Safari',
@@ -64,8 +66,7 @@ const TravelPackages = ({ darkMode }) => {
       originalPrice: '$899',
       rating: 4.7,
       reviews: 156,
-      image:
-        'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: galle,
       highlights: ['Galle Fort', 'Mirissa Whale Watching', 'Unawatuna Beach', 'Spa Treatments'],
       icon: Waves,
       color: 'from-blue-500 to-cyan-500',
@@ -79,8 +80,7 @@ const TravelPackages = ({ darkMode }) => {
       originalPrice: '$1,099',
       rating: 4.9,
       reviews: 201,
-      image:
-        'https://images.pexels.com/photos/1450361/pexels-photo-1450361.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: nuwaraeliya,
       highlights: ['Nuwara Eliya', 'Train Journey', 'Tea Factory Visits', 'Horton Plains'],
       icon: TreePine,
       color: 'from-purple-500 to-indigo-500',

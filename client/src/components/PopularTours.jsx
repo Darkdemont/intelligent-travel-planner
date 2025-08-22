@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Clock, Users, Star, MapPin, Calendar, ArrowRight } from 'lucide-react';
+import sigiriyaImg from '../assets/sigiriya.jpg';
 
 const PopularTours = ({ darkMode }) => {
   const tours = [
@@ -13,7 +14,7 @@ const PopularTours = ({ darkMode }) => {
       price: '$89',
       rating: 4.9,
       reviews: 342,
-      image: 'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&fit=crop',
+      image: sigiriyaImg,
       highlights: ['Ancient Rock Fortress', 'Cave Temples', 'Local Lunch', 'Expert Guide'],
       nextAvailable: 'Tomorrow',
     },
@@ -108,7 +109,7 @@ const PopularTours = ({ darkMode }) => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {tours.map((tour) => (
             <div
               key={tour.id}

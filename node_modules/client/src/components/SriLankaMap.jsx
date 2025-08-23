@@ -11,8 +11,8 @@ const SriLankaMap = ({ darkMode }) => {
   // ------- CONFIG -------
   // Enter your image dimensions (pixels) for accurate positioning/zoom.
   // If you replace the map image, update these to match the new image size.
-  const IMG_W = 1080; // image width in pixels
-  const IMG_H = 1080; // image height in pixels
+  const IMG_W = 600; // image width in pixels
+  const IMG_H = 7400; // image height in pixels
 
   // Curated cities + highlights. Coordinates are IMAGE PIXELS: [y, x].
   const DATA = useMemo(

@@ -6,8 +6,8 @@ import L from "leaflet";
 // import your map image as a URL (adjust filename if needed)
 import mapImageUrl from "../assets/image.png?url"; // or image.jpeg?url
 
-const IMG_W = 1300; // image pixel width
-const IMG_H = 1400; // image pixel height
+const IMG_W = 1200; // image pixel width
+const IMG_H = 1200; // image pixel height
 
 const CatPill = ({ color, children }) => (
   <span
@@ -48,22 +48,22 @@ const ExperienceMap = ({ darkMode }) => {
   // places across the island (xy are IMAGE PIXELS: [y, x])
   const PLACES = useMemo(
     () => [
-      { city: "Unawatuna", title: "Unawatuna Beach", xy: [1880, 860], categories: ["beaches"], desc: "Golden bay." },
-      { city: "Galle", title: "Galle Fort", xy: [1790, 820], categories: ["culture", "beaches", "lesser"], desc: "UNESCO old town." },
-      { city: "Colombo", title: "Galle Face Green", xy: [1700, 760], categories: ["beaches", "gastronomy"], desc: "Sunset snacks." },
+      { city: "Unawatuna", title: "Unawatuna Beach", xy: [1310, 560], categories: ["beaches"], desc: "Golden bay." },
+      { city: "Galle", title: "Galle Fort", xy: [1355, 460], categories: ["culture", "beaches", "lesser"], desc: "UNESCO old town." },
+      { city: "Colombo", title: "Galle Face Green", xy: [1600, 360], categories: ["beaches", "gastronomy"], desc: "Sunset snacks." },
 
-      { city: "Sigiriya", title: "Sigiriya Rock", xy: [1280, 900], categories: ["culture", "adventure"], desc: "Fortress rock." },
-      { city: "Dambulla", title: "Dambulla Cave Temple", xy: [1360, 960], categories: ["culture"], desc: "Murals & shrines." },
-      { city: "Anuradhapura", title: "Ruwanwelisaya", xy: [1020, 690], categories: ["culture"], desc: "Iconic stupa." },
+      { city: "Sigiriya", title: "Sigiriya Rock", xy: [1820, 600], categories: ["culture", "adventure"], desc: "Fortress rock." },
+      { city: "Dambulla", title: "Dambulla Cave Temple", xy: [1750, 540], categories: ["culture"], desc: "Murals & shrines." },
+      //{ city: "Anuradhapura", title: "Ruwanwelisaya", xy: [1020, 690], categories: ["culture"], desc: "Iconic stupa." },
 
-      { city: "Kandy", title: "Temple of the Tooth", xy: [1450, 940], categories: ["culture"], desc: "Sacred relic." },
-      { city: "Ella", title: "Nine Arches Bridge", xy: [1680, 980], categories: ["adventure", "lesser"], desc: "Tea-country viaduct." },
-      { city: "Ella", title: "Little Adam's Peak", xy: [1700, 960], categories: ["adventure", "wildlife"], desc: "Short ridge hike." },
-      { city: "Nuwara Eliya", title: "Tea Estates", xy: [1580, 1010], categories: ["wildlife", "lesser", "gastronomy"], desc: "Tasting & views." },
+      { city: "Kandy", title: "Temple of the Tooth", xy: [3424, 940], categories: ["culture"], desc: "Sacred relic." },
+      { city: "Ella", title: "Nine Arches Bridge", xy: [1580, 600], categories: ["adventure", "lesser"], desc: "Tea-country viaduct." },
+      { city: "Ella", title: "Little Adam's Peak", xy: [1500, 520], categories: ["adventure", "wildlife"], desc: "Short ridge hike." },
+      { city: "Nuwara Eliya", title: "Tea Estates", xy: [1480, 700], categories: ["wildlife", "lesser", "gastronomy"], desc: "Tasting & views." },
 
       { city: "Jaffna", title: "Jaffna Fort", xy: [640, 800], categories: ["culture", "lesser"], desc: "Coastal stronghold." },
-      { city: "Trincomalee", title: "Nilaveli Beach", xy: [1300, 1120], categories: ["beaches", "wildlife"], desc: "Soft sand & snorkel." },
-      { city: "Polonnaruwa", title: "Gal Viharaya", xy: [1260, 980], categories: ["culture", "lesser"], desc: "Rock-cut Buddhas." },
+      { city: "Trincomalee", title: "Nilaveli Beach", xy: [1980, 680], categories: ["beaches", "wildlife"], desc: "Soft sand & snorkel." },
+      { city: "Polonnaruwa", title: "Gal Viharaya", xy: [1900, 600], categories: ["culture", "lesser"], desc: "Rock-cut Buddhas." },
 
       { city: "Colombo", title: "Ministry of Crab", xy: [1680, 740], categories: ["gastronomy"], desc: "Famous seafood." },
     ],
@@ -199,17 +199,25 @@ const ExperienceMap = ({ darkMode }) => {
         </div>
 
         {/* layout: lists on sides, free-floating map center */}
-        <div className="grid grid-cols-12 gap-6 items-start">
+        <div className="grid grid-cols-12 gap-6 items-center">
+
           {/* left experience buttons */}
-          <aside className="col-span-12 lg:col-span-3 space-y-4">
+          <aside className="col-span-12 lg:col-span-3 space-y-4 max-w-sm mx-auto lg:mx-0">
+
             {EXPERIENCES.slice(0, 3).map((e) => (
               <button
                 key={e.key}
                 onMouseEnter={() => showExperience(e.key)}
                 onClick={() => showExperience(e.key)}
                 className={`w-full flex items-center gap-4 rounded-2xl p-3 border text-left transition-all
-                  ${activeExp === e.key ? "ring-2 ring-emerald-500/70" : ""}
-                  ${darkMode ? "bg-gray-800/60 border-gray-800 hover:bg-gray-800" : "bg-white border-gray-200 hover:bg-gray-50"}`}
+  ${darkMode ? "bg-gray-800/60 border-gray-800 hover:bg-gray-800" : "bg-white border-gray-200 hover:bg-gray-50"}`}
+
+style={
+  activeExp === e.key
+    ? { outline: `3px solid ${e.color}`, outlineOffset: "2px" }
+    : undefined
+}
+
               >
                 <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl" style={{ border: `3px dotted ${e.color}` }}>
                   <span className="text-2xl">{e.emoji}</span>
@@ -279,35 +287,44 @@ const ExperienceMap = ({ darkMode }) => {
                 /* the overlay image itself: float with soft shadow */
                 #exp-map .free-float-map-img {
                   filter:
-                    drop-shadow(0 30px 60px rgba(0,0,0,.18))
-                    drop-shadow(0 8px 24px rgba(0,0,0,.10));
                   pointer-events: none; /* markers still interact; image doesn't capture clicks */
                 }
               `}</style>
             </div>
 
             {/* legend */}
-            <div className="flex items-center gap-2 mt-3">
-              <Compass className="w-4 h-4 text-emerald-500" />
-              <div className={`${darkMode ? "text-gray-300" : "text-gray-700"} text-sm`}>
-                Showing:{" "}
-                <CatPill color={EXPERIENCES.find((e) => e.key === activeExp).color}>
-                  {EXPERIENCES.find((e) => e.key === activeExp).title}
-                </CatPill>
-              </div>
-            </div>
+            <div className="mt-3 flex justify-center">
+  <div className="inline-flex items-center gap-2">
+    <Compass className="w-4 h-4 text-emerald-500" />
+    <div className={`${darkMode ? "text-gray-300" : "text-gray-700"} text-sm`}>
+      Showing:{' '}
+      <CatPill color={expByKey[activeExp].color}>
+        {expByKey[activeExp].title}
+      </CatPill>
+    </div>
+  </div>
+</div>
+
+
           </div>
 
           {/* right experience buttons */}
-          <aside className="col-span-12 lg:col-span-3 space-y-4">
+          <aside className="col-span-12 lg:col-span-3 space-y-4 max-w-sm mx-auto lg:mx-0">
+
             {EXPERIENCES.slice(3).map((e) => (
               <button
                 key={e.key}
                 onMouseEnter={() => showExperience(e.key)}
                 onClick={() => showExperience(e.key)}
                 className={`w-full flex items-center gap-4 rounded-2xl p-3 border text-left transition-all
-                  ${activeExp === e.key ? "ring-2 ring-emerald-500/70" : ""}
-                  ${darkMode ? "bg-gray-800/60 border-gray-800 hover:bg-gray-800" : "bg-white border-gray-200 hover:bg-gray-50"}`}
+  ${darkMode ? "bg-gray-800/60 border-gray-800 hover:bg-gray-800" : "bg-white border-gray-200 hover:bg-gray-50"}`}
+
+style={
+  activeExp === e.key
+    ? { outline: `3px solid ${e.color}`, outlineOffset: "2px" }
+    : undefined
+}
+
               >
                 <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl" style={{ border: `3px dotted ${e.color}` }}>
                   <span className="text-2xl">{e.emoji}</span>

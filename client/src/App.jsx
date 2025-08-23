@@ -1,44 +1,63 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
+import Footer from './components/Footer';
+
 import Hero from './components/Hero';
 import Features from './components/Features';
 import TravelPackages from './components/TravelPackages';
 import PopularTours from './components/PopularTours';
-import SriLankaMap from './components/SriLankaMap';
-import Testimonials from './components/Testimonials';
-import Footer from './components/Footer';
 import ExperienceMap from './components/ExperienceMap';
+import Testimonials from './components/Testimonials';
+import PlanWithAI from './pages/PlanWithAI';
+import MyAccountPage from './pages/MyAccount';
+
+
+
+import Blog from './pages/Blog';
+
+const HomePage = ({ darkMode }) => (
+  <>
+    <Hero darkMode={darkMode} />
+    <Features darkMode={darkMode} />
+    <TravelPackages darkMode={darkMode} />
+    <PopularTours darkMode={darkMode} />
+    <ExperienceMap darkMode={darkMode} />
+    <Testimonials darkMode={darkMode} />
+  </>
+);
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    if (savedMode) {
-      setDarkMode(JSON.parse(savedMode));
-    }
+    const saved = localStorage.getItem('darkMode');
+    if (saved !== null) setDarkMode(JSON.parse(saved));
   }, []);
 
   const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem('darkMode', JSON.stringify(newMode));
+    setDarkMode(prev => {
+      const next = !prev;
+      localStorage.setItem('darkMode', JSON.stringify(next));
+      return next;
+    });
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      darkMode ? 'dark bg-gray-900' : 'bg-white'
-    }`}>
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-white'}`}>
+      {/* Shared header */}
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Hero darkMode={darkMode} />
-      <TravelPackages darkMode={darkMode} />
-      <PopularTours darkMode={darkMode} />
-      <Features darkMode={darkMode} />
-      <ExperienceMap darkMode={darkMode} />
-      
-      
-      <SriLankaMap darkMode={darkMode} />
-      <Testimonials darkMode={darkMode} />
+
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<HomePage darkMode={darkMode} />} />
+        <Route path="/blog" element={<Blog darkMode={darkMode} />} />
+        <Route path="/plan-ai" element={<PlanWithAI darkMode={darkMode} />} />
+        <Route path="/account" element={<MyAccountPage darkMode={darkMode} />} />
+      </Routes>
+
+      {/* Shared footer */}
       <Footer darkMode={darkMode} />
     </div>
   );

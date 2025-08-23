@@ -13,7 +13,7 @@ const Footer = ({ darkMode }) => {
   return (
     <footer className={`${darkMode ? 'bg-gray-900' : 'bg-gray-900'} text-white`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
@@ -66,12 +66,19 @@ const Footer = ({ darkMode }) => {
             </div>
           ))}
         </div>
+        
 
         {/* Bottom Section */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2025 Zentra Travels. All rights reserved.
-          </p>
+          <p className="text-gray-400 text-sm text-center md:text-left">
+  © 2025 <span className="font-semibold text-white">Zentra Travels</span>. 
+  All rights reserved. {" "} 
+  <span className="block md:inline text-emerald-400">
+    A Wijesiri Group (Pvt) Ltd Company
+  </span>
+</p>
+
+          
 
           <div className="flex space-x-4">
             {[Facebook, Twitter, Instagram, Youtube].map((Icon, index) => (
@@ -85,6 +92,8 @@ const Footer = ({ darkMode }) => {
             ))}
           </div>
         </div>
+        
+
       </div>
     </footer>
   );

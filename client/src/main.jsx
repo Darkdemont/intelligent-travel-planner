@@ -1,16 +1,16 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 import './index.css';
+import { AuthProvider } from './contexts/AuthContext.jsx';
 
-const rootEl = document.getElementById('root');
-
-if (rootEl) {
-  createRoot(rootEl).render(
-    <StrictMode>
-      <App />
-    </StrictMode>
-  );
-} else {
-  console.error("Root element with id 'root' not found");
-}
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <BrowserRouter>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </BrowserRouter>
+  </StrictMode>
+);

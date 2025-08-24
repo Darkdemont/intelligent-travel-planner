@@ -2,147 +2,182 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-// Create context (no TS generics)
+// Prefer Vite env if provided; otherwise use your current value
+const API_BASE_URL =
+  (typeof import.meta !== 'undefined' &&
+    import.meta.env &&
+    import.meta.env.VITE_API_BASE_URL) ||
+  'http://localhost:5003/api';
+
 const AuthContext = createContext(undefined);
-
-/* ---------------- Mock data (same as TSX) ---------------- */
-const mockUsers = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '+1 555 123 4567',
-    role: 'customer',
-    twoFactorEnabled: false,
-    createdAt: '2024-01-15',
-    preferences: {
-      travelStyle: 'adventure',
-      interests: ['Photography', 'Hiking', 'Cultural Tours'],
-      dietaryRestrictions: 'None',
-      accommodationType: 'Boutique Hotels',
-    },
-  },
-  {
-    id: '2',
-    name: 'Admin User',
-    email: 'admin@zentratravels.com',
-    phone: '+94 11 234 5678',
-    role: 'admin',
-    twoFactorEnabled: true,
-    createdAt: '2023-06-01',
-  },
-];
-
-const mockBookings = [
-  {
-    id: '1',
-    userId: '1',
-    packageName: 'Cultural Heritage Explorer',
-    destination: 'Kandy, Sigiriya, Anuradhapura',
-    startDate: '2025-03-15',
-    endDate: '2025-03-22',
-    travelers: 2,
-    totalCost: 1798,
-    status: 'confirmed',
-    bookingDate: '2025-01-10',
-    orderNumber: 'ZT-2025-001234',
-  },
-  {
-    id: '2',
-    userId: '1',
-    packageName: 'Beach & Relaxation',
-    destination: 'Galle, Mirissa, Unawatuna',
-    startDate: '2024-12-20',
-    endDate: '2024-12-25',
-    travelers: 2,
-    totalCost: 1398,
-    status: 'completed',
-    bookingDate: '2024-11-15',
-    orderNumber: 'ZT-2024-005678',
-  },
-];
-
-/* ---------------- Provider ---------------- */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Load any stored session on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem('zentra_user');
-    if (storedUser) {
-      const userData = JSON.parse(storedUser);
-      setUser(userData);
-      setBookings(mockBookings.filter((b) => b.userId === userData.id));
+    const token = localStorage.getItem('zentra_token');
+    if (token) {
+      fetchCurrentUser(token);
+    } else {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const login = async (email, password) => {
-    setIsLoading(true);
+  const fetchCurrentUser = async (token) => {
     try {
-      await new Promise((r) => setTimeout(r, 1000));
-      const foundUser = mockUsers.find((u) => u.email === email);
-      if (foundUser && password === 'password123') {
-        setUser(foundUser);
-        setBookings(mockBookings.filter((b) => b.userId === foundUser.id));
-        localStorage.setItem('zentra_user', JSON.stringify(foundUser));
-        return true;
+      const response = await fetch(`${API_BASE_URL}/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        fetchUserBookings(token);
+      } else {
+        localStorage.removeItem('zentra_token');
       }
-      return false;
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+      localStorage.removeItem('zentra_token');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const fetchUserBookings = async (token) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/bookings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBookings(data.bookings || []);
+      }
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+    }
+  };
+
+  const login = async (email, password) => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setUser(data.user);
+        localStorage.setItem('zentra_token', data.token);
+        fetchUserBookings(data.token);
+        setIsLoading(false);
+        return true;
+      }
+      setIsLoading(false);
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      setIsLoading(false);
+      return false;
+    }
+  };
+
   const register = async (userData) => {
     setIsLoading(true);
+
     try {
-      await new Promise((r) => setTimeout(r, 1000));
-      const newUser = {
-        id: Date.now().toString(),
-        name: userData.name,
-        email: userData.email,
-        phone: userData.phone,
-        role: 'customer',
-        twoFactorEnabled: false,
-        createdAt: new Date().toISOString().split('T')[0],
-      };
-      setUser(newUser);
-      setBookings([]);
-      localStorage.setItem('zentra_user', JSON.stringify(newUser));
-      return true;
-    } finally {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setUser(data.user);
+        localStorage.setItem('zentra_token', data.token);
+        setBookings([]);
+        setIsLoading(false);
+        return true;
+      }
       setIsLoading(false);
+      return false;
+    } catch (error) {
+      console.error('Registration error:', error);
+      setIsLoading(false);
+      return false;
     }
   };
 
   const logout = () => {
     setUser(null);
     setBookings([]);
-    localStorage.removeItem('zentra_user');
+    localStorage.removeItem('zentra_token');
   };
 
   const updateProfile = async (data) => {
     if (!user) return false;
+
     setIsLoading(true);
+
     try {
-      await new Promise((r) => setTimeout(r, 1000));
-      const updatedUser = { ...user, ...data };
-      setUser(updatedUser);
-      localStorage.setItem('zentra_user', JSON.stringify(updatedUser));
-      return true;
-    } finally {
+      const token = localStorage.getItem('zentra_token');
+      const response = await fetch(`${API_BASE_URL}/users/profile`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok && responseData.success) {
+        setUser(responseData.user);
+        setIsLoading(false);
+        return true;
+      }
       setIsLoading(false);
+      return false;
+    } catch (error) {
+      console.error('Update profile error:', error);
+      setIsLoading(false);
+      return false;
     }
   };
 
   const findBooking = async (email, orderNumber) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    const booking = mockBookings.find((b) => b.orderNumber === orderNumber);
-    const userExists = mockUsers.find((u) => u.email === email);
-    return booking && userExists ? booking : null;
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/find-booking`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, orderNumber }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        return data.booking || null;
+      }
+      return null;
+    } catch (error) {
+      console.error('Find booking error:', error);
+      return null;
+    }
   };
 
   const isAdmin = () => user?.role === 'admin';
@@ -166,11 +201,10 @@ AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-/* ---------------- Hook ---------------- */
 export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (ctx === undefined) {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  return ctx;
+  return context;
 };

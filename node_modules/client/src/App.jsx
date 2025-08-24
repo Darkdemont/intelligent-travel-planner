@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
-
 import Hero from './components/Hero';
 import Features from './components/Features';
 import TravelPackages from './components/TravelPackages';
@@ -12,7 +11,8 @@ import ExperienceMap from './components/ExperienceMap';
 import Testimonials from './components/Testimonials';
 import PlanWithAI from './pages/PlanWithAI';
 import MyAccountPage from './pages/MyAccount';
-
+import Tours from './pages/Tours';
+import Help from './pages/Help';
 
 
 import Blog from './pages/Blog';
@@ -25,6 +25,7 @@ const HomePage = ({ darkMode }) => (
     <PopularTours darkMode={darkMode} />
     <ExperienceMap darkMode={darkMode} />
     <Testimonials darkMode={darkMode} />
+    <Footer darkMode={darkMode} />
   </>
 );
 
@@ -53,8 +54,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage darkMode={darkMode} />} />
         <Route path="/blog" element={<Blog darkMode={darkMode} />} />
+        <Route path="/tours" element={<Tours darkMode={darkMode} />} />
         <Route path="/plan-ai" element={<PlanWithAI darkMode={darkMode} />} />
         <Route path="/account" element={<MyAccountPage darkMode={darkMode} />} />
+        <Route path="/help" element={<Help darkMode={darkMode} />} />
       </Routes>
 
       {/* Shared footer */}
